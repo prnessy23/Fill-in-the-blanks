@@ -1,0 +1,20 @@
+.game {
+    display:flex;
+    flex-wrap: nowrap;
+}
+
+#word {
+    flex:0 1 65%;
+}
+
+#scores {
+    flex: 0 1 35%;
+}
+
+#start {
+    float:right;
+}
+
+div {
+    padding:1em;
+}
