@@ -13,8 +13,10 @@ var interval;
 startButton.addEventListener("click", start);
 
 function start(){
+time=100;    
 startTimer();
 startWords();
+startButton.removeEventListener("click", start );
 }
 
 function startTimer(){
@@ -44,6 +46,19 @@ function startWords() {
 }
 
 function endGame() {
+    clearInterval(interval);
+    if ( time > 0 ) { 
+
+        score[0]++;
+
+    } else {
+        score[1]++;
+    }  
+var winsspan=document.getElementById("winspan");
+var lossspan=document.getElementById("lossspan");
+winsspan.textContent=score[0];
+lossspan.textContent=score[1];
+startButton.addEventListener("click", start);
 
 }
 
