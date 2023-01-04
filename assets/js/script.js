@@ -10,15 +10,19 @@ var score = [0,0];
 var time = 100;
 var interval;
 var currentWord;
-var wordLength;
+var pressedKeys = [];
 
 startButton.addEventListener("click", start);
 
 function start(){
-time=100;    
-startTimer();
-startWords();
-startButton.removeEventListener("click", start );
+    var wordList = document.querySelectorAll(".wordList");
+    for (i = 0; i < wordList.length; i++) {
+        wordList[i].remove();
+    }
+    time=100;    
+    startTimer();
+    startWords();
+    startButton.removeEventListener("click", start );
 }
 
 function startTimer(){
@@ -44,7 +48,7 @@ function startWords() {
         document.addEventListener("keydown", function (){
             evalMatch(event);
         } )
-        wordLength=0;
+        // wordLength=0;
     } else {
         endGame();
     }
@@ -63,26 +67,41 @@ var winsspan=document.getElementById("winsspan");
 var lossspan=document.getElementById("lossspan");
 winsspan.textContent=score[0];
 lossspan.textContent=score[1];
+words = ["readme", "assets", "script", "style", "index", "java", "webpage", "coding", "developer", "tech"];
 startButton.addEventListener("click", start);
 
 }
 
 function evalMatch(event) {
-    var pressedKey=event.key;
-    console.log(pressedKey);
+    var pressedKey=event.key.toLowerCase();
     for (var i = 0; i < currentWord.length; i++){
-        if (pressedKey === currentWord[i]){
+        if (pressedKey === currentWord[i] && !pressedKeys.includes(pressedKey)){
             var currentSpan = document.getElementById("letter" + i);
             currentSpan.textContent = currentWord[i];
-            wordLength++;
-            console.log(wordLength);
         }
     }
-    if (wordLength == currentWord.length){
+    pressedKeys.push(pressedKey);
+    var wordLength = 0;
+    for (var i = 0; i < currentWord.length; i++) {
+        var currentSpan = document.getElementById("letter" + i);
+        if (currentSpan.textContent !== "_ ") {
+            wordLength++;
+        }
+        console.log(wordLength);
+        console.log(currentWord.length);
+    }
+    if (wordLength === currentWord.length){
+        console.log("complete");
         for (var i = 0; i < currentWord.length; i++){
             var currentSpan = document.getElementById("letter" + i);
             currentSpan.remove();
         }
+        var prevWord = document.createElement("p");
+        prevWord.textContent = currentWord;
+        prevWord.className = "wordList";
+        var wordSec = document.getElementById("word");
+        wordSec.appendChild(prevWord);
+        pressedKeys = [];
         startWords();
     }
 }
