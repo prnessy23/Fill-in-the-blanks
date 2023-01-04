@@ -9,6 +9,8 @@ var losses = document.getElementById("losses");
 var score = [0,0];
 var time = 100;
 var interval;
+var currentWord;
+var wordLength;
 
 startButton.addEventListener("click", start);
 
@@ -32,14 +34,17 @@ interval= setInterval(function(){
 
 function startWords() {
     if (words.length > 0) {
-        var currentWord = words.splice(Math.floor(Math.random() * words.length), 1)[0];
+        currentWord = words.splice(Math.floor(Math.random() * words.length), 1)[0];
         for (var i = 0; i < currentWord.length; i++) {
             var newSpan = document.createElement("span");
             newSpan.textContent = "_ ";
             newSpan.setAttribute("id", "letter" + i);
             word.appendChild(newSpan);
-            document.addEventListener("keydown", evalMatch);
         }
+        document.addEventListener("keydown", function (){
+            evalMatch(event);
+        } )
+        wordLength=0;
     } else {
         endGame();
     }
@@ -54,7 +59,7 @@ function endGame() {
     } else {
         score[1]++;
     }  
-var winsspan=document.getElementById("winspan");
+var winsspan=document.getElementById("winsspan");
 var lossspan=document.getElementById("lossspan");
 winsspan.textContent=score[0];
 lossspan.textContent=score[1];
@@ -62,6 +67,22 @@ startButton.addEventListener("click", start);
 
 }
 
-function evalMatch() {
-    console.log("It worked");
+function evalMatch(event) {
+    var pressedKey=event.key;
+    console.log(pressedKey);
+    for (var i = 0; i < currentWord.length; i++){
+        if (pressedKey === currentWord[i]){
+            var currentSpan = document.getElementById("letter" + i);
+            currentSpan.textContent = currentWord[i];
+            wordLength++;
+            console.log(wordLength);
+        }
+    }
+    if (wordLength == currentWord.length){
+        for (var i = 0; i < currentWord.length; i++){
+            var currentSpan = document.getElementById("letter" + i);
+            currentSpan.remove();
+        }
+        startWords();
+    }
 }
