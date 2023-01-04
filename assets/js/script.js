@@ -48,5 +48,5 @@ function endGame() {
 }
 
 function evalMatch() {
-    
+    console.log("It worked");
 }
